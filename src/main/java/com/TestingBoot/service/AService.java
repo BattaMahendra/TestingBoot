@@ -3,13 +3,21 @@ package com.TestingBoot.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import com.TestingBoot.entity.AnEntity;
 import com.TestingBoot.repo.AnJPARepo;
 
+import lombok.extern.slf4j.Slf4j;
+import lombok.extern.slf4j.XSlf4j;
+
+
+
 @Service
+@Slf4j
 public class AService {
 	
 	@Autowired
@@ -21,7 +29,7 @@ public class AService {
 	 * 
 	 * or u can use @Cacheable(value="someName")
 	 */
-	@Cacheable(value="someName" ,  key = "#root.target.MY_KEY")
+	@Cacheable(value="someName" ,  key = "#root.methodName")
 	public List<AnEntity> getAllValues(){
 		return anJPARepo.findAll();
 	}
@@ -33,17 +41,19 @@ public class AService {
 	
 	@Cacheable(value = "employees",key = "#id")
 	public AnEntity getById(int id) {
-		System.out.println("we are inside service");
+		log.info("we are entering into service with id {}" , id);
+		System.out.println("we are entering service");
 		return anJPARepo.findById(id).get();
 	}
 	
+	@CachePut(value = "employees")
 	public AnEntity updateEntity(AnEntity anEntity) {
 		if(getById(anEntity.getId())!=null) {
 			return anJPARepo.save(anEntity);
 		}
 		return null;
 	}
-	
+	@CacheEvict(value = "employees", allEntries = true)
 	public boolean deleteEntity(int id) {
 		if(getById(id)!=null) {
 			anJPARepo.deleteById(id);

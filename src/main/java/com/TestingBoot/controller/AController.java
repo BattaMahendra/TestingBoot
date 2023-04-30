@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.TestingBoot.entity.AnEntity;
+import com.TestingBoot.jms.RedisPublisher;
 import com.TestingBoot.service.AService;
 
 @RestController
@@ -21,6 +22,9 @@ import com.TestingBoot.service.AService;
 public class AController {
 	@Autowired
 	private AService aService;
+	
+	@Autowired
+	private RedisPublisher redisPublisher; 
 	
 	@GetMapping("/g")
 	public List<AnEntity> getAllValues(){
@@ -46,6 +50,11 @@ public class AController {
 	@PostMapping("/p")
 	public AnEntity addAValue(@RequestBody AnEntity a) {
 		return aService.addAVAlue(a);
+	}
+	
+	@PostMapping("/publish")
+	public AnEntity publishToRedis(@RequestBody AnEntity a) {
+		return redisPublisher.publishMessage(a);
 	}
 
 }
