@@ -5,9 +5,9 @@ import static org.mockito.Mockito.when;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.Test;
+
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.runner.RunWith;
+
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
@@ -44,7 +44,7 @@ public class ServiceTest {
 			
 	}
 	
-	@Test
+	@org.junit.jupiter.api.Test
 	public void getAllTest() {
 		when(anJPARepo.findAll()).thenReturn(list);
 		aservice.getAllValues();
