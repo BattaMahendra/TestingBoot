@@ -23,6 +23,8 @@ public class RedisConfig {
 	        configuration.setHostName("localhost");
 	        configuration.setPort(6379);
 	        return new JedisConnectionFactory(configuration);
+	        
+	        
 	    }
 
 	    @Bean
