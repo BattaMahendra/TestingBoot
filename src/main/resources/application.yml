@@ -19,3 +19,10 @@ spring:
     show-sql: true
     hibernate:
       ddl-auto: update
+management:
+   security:
+      enabled: false
+   endpoints:
+           web:
+             exposure:
+                include: health,info,beans,env
