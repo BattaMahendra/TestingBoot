@@ -1,10 +1,12 @@
 package com.TestingBoot.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,6 +22,7 @@ import com.TestingBoot.service.AService;
 
 @RestController
 @RequestMapping("/app")
+@RefreshScope
 public class AController {
 	@Autowired
 	private AService aService;
@@ -29,6 +32,9 @@ public class AController {
 	
 	@Value("${testing.value}")
 	private int myValue;
+	
+	@Value("${cars}")
+	private List<String> listOfCars;
 	
 	@GetMapping("/g")
 	public List<AnEntity> getAllValues(){
@@ -60,10 +66,25 @@ public class AController {
 	public AnEntity publishToRedis(@RequestBody AnEntity a) {
 		return redisPublisher.publishMessage(a);
 	}
+	
+	/*
+	 * when ever you want to get config values dynamically while running the application , you need to hit the actuator endpoint
+	 * i.e localhost:8080/actuator/refresh in post request , this will update the values dynamically into ur application values.
+	 * if you don't do that then u need to restart this client app every time to see dynamically updated config files.
+	 * 
+	 * suppose you change some values in github config files while this application is running. Then those values are not updated in the 
+	 * application dynamically. In order to get values without restarting the server you need to use above mentioned process. And for this 
+	 * process to work you need to keep @RefreshScope in the class where the values are being updated.
+	 * 
+	 * 
+	 */
 	@GetMapping("/values")
-	public String getvaluesFromExternalProps() {
+	public List<Object> getvaluesFromExternalProps() {
 		System.out.println("enterd into values endpoint");
-		return Integer.toString(myValue);
+		List<Object> listOfValues=new ArrayList<>();
+		listOfValues.add(Integer.toString(myValue));
+		if(listOfCars.isEmpty()) return listOfValues; else listOfValues.addAll(listOfCars);
+		return listOfValues;
 	}
 
 }
