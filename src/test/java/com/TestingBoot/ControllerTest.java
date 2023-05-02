@@ -15,7 +15,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.runner.RunWith;
+
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
@@ -43,7 +43,7 @@ import net.bytebuddy.NamingStrategy.Suffixing.BaseNameResolver.ForGivenType;
 //@SpringBootTest
 @TestInstance(Lifecycle.PER_CLASS)
 @WebMvcTest(controllers =AController.class )
-@RunWith(MockitoJUnitRunner.class)
+//@RunWith(MockitoJUnitRunner.class)
 public class ControllerTest {
 	@Autowired
 //@ExtendWith(SpringExtension.class)

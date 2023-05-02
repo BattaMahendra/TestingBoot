@@ -3,6 +3,7 @@ package com.TestingBoot.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,6 +26,9 @@ public class AController {
 	
 	@Autowired
 	private RedisPublisher redisPublisher; 
+	
+	@Value("${testing.value}")
+	private int myValue;
 	
 	@GetMapping("/g")
 	public List<AnEntity> getAllValues(){
@@ -55,6 +59,11 @@ public class AController {
 	@PostMapping("/publish")
 	public AnEntity publishToRedis(@RequestBody AnEntity a) {
 		return redisPublisher.publishMessage(a);
+	}
+	@GetMapping("/values")
+	public String getvaluesFromExternalProps() {
+		System.out.println("enterd into values endpoint");
+		return Integer.toString(myValue);
 	}
 
 }
