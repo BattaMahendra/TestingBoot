@@ -20,6 +20,9 @@ import com.TestingBoot.entity.AnEntity;
 import com.TestingBoot.jms.RedisPublisher;
 import com.TestingBoot.service.AService;
 
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+
 @RestController
 @RequestMapping("/app")
 @RefreshScope
@@ -36,6 +39,8 @@ public class AController {
 	@Value("${cars}")
 	private List<String> listOfCars;
 	
+	@ApiOperation(value = "get a list of all entities")
+	@ApiResponse(code=200 ,message="OK")
 	@GetMapping("/g")
 	public List<AnEntity> getAllValues(){
 		return aService.getAllValues();
