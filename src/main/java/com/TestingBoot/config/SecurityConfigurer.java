@@ -14,9 +14,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
-import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.access.AccessDeniedHandlerImpl;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 
@@ -77,7 +75,7 @@ public class SecurityConfigurer{
 		.securityMatcher(AntPathRequestMatcher.antMatcher("/**"))
 		.authorizeHttpRequests((auth) ->
 		auth.requestMatchers(AntPathRequestMatcher.antMatcher("/app/welcome/**")).permitAll()
-			.requestMatchers(AntPathRequestMatcher.antMatcher("/app/g/**")).hasRole("USER")
+			.requestMatchers(AntPathRequestMatcher.antMatcher("/app/g")).hasRole("USER")
 			.requestMatchers(AntPathRequestMatcher.antMatcher("/**")).hasRole("ADMIN")
 			.anyRequest().authenticated()
 			)
