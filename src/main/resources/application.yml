@@ -4,6 +4,14 @@ spring:
     redis:
       time-to-live: 60000
       cache-null-values: true
+      
+# if we just add spring starter dependency it will provide automatic security by login page
+#the credentials will be user and password is provided in the console logs
+#how ever we can customize the credentials by below props
+  security:
+      user:
+        name: mahendra
+        password: 12345
 
 
   datasource:
