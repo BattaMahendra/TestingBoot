@@ -2,6 +2,7 @@ package com.TestingBoot.controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -85,6 +86,15 @@ public class AController {
 		listOfValues.add(Integer.toString(myValue));
 		if(listOfCars.isEmpty()) return listOfValues; else listOfValues.addAll(listOfCars);
 		return listOfValues;
+	}
+	
+	@GetMapping(value={"/welcome","/welcome/{userName}"})
+	public String welcomeMessage(@PathVariable Optional<String> userName) {
+		
+		return userName
+				.isPresent() ?
+				 ("<h1>Hey "+userName.get()+"<br>welcome to TestingBoot app</h1>")
+				:("<h1>Hey Mahendra <br> welcome to TestingBoot app</h1>");
 	}
 
 }
