@@ -88,9 +88,18 @@ public class AController {
 		return listOfValues;
 	}
 	
+/*
+ * in the get mapping we have two end point urls.
+ * suppose if user don't pass the userName along with url then the 
+ * first end point is taken and if user passes path variable then second end point 
+ * with path variable is triggered.
+ */
 	@GetMapping(value={"/welcome","/welcome/{userName}"})
 	public String welcomeMessage(@PathVariable Optional<String> userName) {
-		
+	
+		/*
+		 * used ternary operator to filter out optional userName coming form path variable
+		 */
 		return userName
 				.isPresent() ?
 				 ("<h1>Hey "+userName.get()+"<br>welcome to TestingBoot app</h1>")
