@@ -70,6 +70,12 @@ public class SecurityConfigurer{
 	public SecurityFilterChain ourFilterChain(HttpSecurity http) throws Exception {
 		http
 		/*
+		 * this httpBasic() enables to access urls from apps like postman
+		 * without this when we hit url in postman it returns HTML login page of spring security
+		 */
+		.httpBasic()
+		.and()
+		/*
 		 * this securityMatcher allows all end points starting from / to be hit.
 		 */
 		.securityMatcher(AntPathRequestMatcher.antMatcher("/**"))
@@ -79,6 +85,10 @@ public class SecurityConfigurer{
 			.requestMatchers(AntPathRequestMatcher.antMatcher("/**")).hasRole("ADMIN")
 			.anyRequest().authenticated()
 			)
+		/*
+		 * when we hit url from browser this enables us to view login and logout 
+		 * pages of spring security
+		 */
 		.formLogin();
 //		.sessionManagement()
 //		.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
