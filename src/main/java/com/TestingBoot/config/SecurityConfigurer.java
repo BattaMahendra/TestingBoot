@@ -80,6 +80,11 @@ public class SecurityConfigurer{
 		 */
 		.securityMatcher(AntPathRequestMatcher.antMatcher("/**"))
 		.authorizeHttpRequests((auth) ->
+		/*
+		 * I have set the roles from least security to highest (general < USER <ADMIN)
+		 * When I did reverse it didn't work out , only admin was working
+		 * when I put in this order everything worked well.
+		 */
 		auth.requestMatchers(AntPathRequestMatcher.antMatcher("/app/welcome/**")).permitAll()
 			.requestMatchers(AntPathRequestMatcher.antMatcher("/app/g")).hasRole("USER")
 			.requestMatchers(AntPathRequestMatcher.antMatcher("/**")).hasRole("ADMIN")
