@@ -18,7 +18,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.TestingBoot.entity.AnEntity;
+import com.TestingBoot.entity.CustomUser;
 import com.TestingBoot.jms.RedisPublisher;
+import com.TestingBoot.repo.UserRepository;
 import com.TestingBoot.service.AService;
 
 @RestController
@@ -27,6 +29,9 @@ import com.TestingBoot.service.AService;
 public class AController {
 	@Autowired
 	private AService aService;
+	
+	@Autowired
+	UserRepository userRepository;
 	
 	@Autowired
 	private RedisPublisher redisPublisher; 
@@ -100,6 +105,12 @@ public class AController {
 		/*
 		 * used ternary operator to filter out optional userName coming form path variable
 		 */
+//		CustomUser user = new CustomUser();
+//		user.setActive(true);
+//		user.setRoles("ROLES_ADMIN");
+//		user.setPassword("12345");
+//		user.setUserName("admin");
+//		userRepository.save(user);
 		return userName
 				.isPresent() ?
 				 ("<h1>Hey "+userName.get()+"<br>welcome to TestingBoot app</h1>")
