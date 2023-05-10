@@ -139,7 +139,7 @@ public class SecurityConfigurer{
 	/**
 	 * we can either create a bean or auto wire it
 	 * for in memory database I hard coded it and for jdbc security I created 
-	 * a package and auto wired it from there
+	 * a java package for specific classes of UserDetailsService and auto wired it from there
 	 */
 	@Autowired
 	UserDetailsService userDetailsService;

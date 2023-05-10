@@ -10,6 +10,11 @@ import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+/*
+ * created this entity to map user credentials
+ * spring security uses the instances of this class from DB to secure and 
+ * authenticate application.
+ */
 
 @Entity
 @Table(name = "user")

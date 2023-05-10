@@ -31,8 +31,8 @@ public class CustomUserDetails implements UserDetails {
 		this.password=customUser.getPassword();
 		this.active=customUser.isActive();
 		/*
-		 * we have roles in DB separated by commas
-		 * we will split them into individual strings , so we stream them to process
+		 * we have roles(as a string) in DB separated by commas
+		 * we will split them into individual strings so that we can stream them to process
 		 * Then also they are only strings not GrantedAuthority objects
 		 * So we need to convert them to that object.
 		 * we have a simple constructor new SimpleGrantedAuthority("ROLE_USER") which takes a string and convert that 
