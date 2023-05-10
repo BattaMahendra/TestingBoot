@@ -20,11 +20,18 @@ public class CustomUserDetailsService implements UserDetailsService {
 	
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+	
+		/*
+		 * from here we will get the user details by using JPA
+		 */
 		Optional<CustomUser> user =userRepository.findByUserName(username);
 		
 //		return new CustomUserDetails(user.get());
+		
 		/*
 		 * or u can use
+		 * here we are mapping the user details(Optional) into a UserDetails object
+		 * so that AuthenticationProvider class can work with it.
 		 */
 		return user.map(CustomUserDetails::new).get();
 	}
