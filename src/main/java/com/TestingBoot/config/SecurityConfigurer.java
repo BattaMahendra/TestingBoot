@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -20,7 +22,10 @@ import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+
+import com.TestingBoot.filter.JwtRequestFilter;
 
 
 /*
@@ -39,7 +44,7 @@ public class SecurityConfigurer{
 	 */
 	@Bean
 	public SecurityFilterChain ourFilterChain(HttpSecurity http) throws Exception {
-		http
+		http.csrf().disable()
 		/*
 		 * this httpBasic() enables to access urls from apps like postman
 		 * without this when we hit url in postman it returns HTML login page of spring security
@@ -56,24 +61,43 @@ public class SecurityConfigurer{
 		 * When I did reverse it didn't work out , only admin was working
 		 * when I put in this order everything worked well.
 		 */
-		auth.requestMatchers(AntPathRequestMatcher.antMatcher("/app/welcome/**")).permitAll()
-		.requestMatchers(AntPathRequestMatcher.antMatcher("/app/g")).hasRole("USER")
-		.requestMatchers(AntPathRequestMatcher.antMatcher("/**")).hasRole("ADMIN")
+		auth
+//		.requestMatchers("/**").hasRole("ADMIN")
+		.requestMatchers(AntPathRequestMatcher.antMatcher("/app/welcome/**")).permitAll()
+		.requestMatchers(AntPathRequestMatcher.antMatcher("/app/authenticate/**")).permitAll()
+//		.requestMatchers(AntPathRequestMatcher.antMatcher("/**")).hasRole("ADMIN")
+//		.requestMatchers(AntPathRequestMatcher.antMatcher("/app/g")).hasRole("USER")
+		
+//		.requestMatchers("/app/welcome/**","/app/authenticate/**").permitAll()
 		.anyRequest().authenticated()
 				)
+//		.authorizeHttpRequests()
+//		.requestMatchers("/app/g").hasRole("USER")
+//		.and()
+//		.authorizeHttpRequests()
+//		.requestMatchers("/**").hasRole("ADMIN")
+//		.anyRequest().authenticated()
+//		.and()
+		
 		/*
 		 * when we hit url from browser this enables us to view login and logout 
 		 * pages of spring security
 		 */
-		.formLogin();
+		.formLogin()
+		.and()
+		.exceptionHandling()
+		.and()
+		.sessionManagement()
+		.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+		http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
 		//		.sessionManagement()
 		//		.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 		//		.and()
 		//		.exceptionHandling()
 		//		.authenticationEntryPoint(new AuthenticationEntryPoint())
 		//		.accessDeniedHandler(new AccessDeniedHandlerImpl())
-		//		.and()
-		//		.csrf().disable()
+//				.and()
+//				.csrf().disable();
 		//		.build();
 		return http.build();
 	}
@@ -144,6 +168,17 @@ public class SecurityConfigurer{
 	@Autowired
 	UserDetailsService userDetailsService;
 	
+
+	/*
+	 * this below bean is required for jwt authentication and is used as a part of /app/authenticate/ endpoint in controller
+	 */
+	@Autowired
+	private JwtRequestFilter jwtRequestFilter;
+	@Bean
+	public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
+	    return http.getSharedObject(AuthenticationManagerBuilder.class)
+	            .build();
+	}
 	
 	@Bean
 	public PasswordEncoder encoder() {
