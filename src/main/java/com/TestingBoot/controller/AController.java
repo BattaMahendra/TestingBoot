@@ -8,6 +8,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,6 +29,8 @@ import com.TestingBoot.entity.CustomUser;
 import com.TestingBoot.jms.RedisPublisher;
 import com.TestingBoot.repo.UserRepository;
 import com.TestingBoot.service.AService;
+import com.TestingBoot.user.details.CustomUserDetailsService;
+import com.TestingBoot.util.JwtUtil;
 
 @RestController
 @RequestMapping("/app")
@@ -115,6 +124,39 @@ public class AController {
 				.isPresent() ?
 				 ("<h1>Hey "+userName.get()+"<br>welcome to TestingBoot app</h1>")
 				:("<h1>Hey Mahendra <br> welcome to TestingBoot app</h1>");
+	}
+	
+	/*
+	 * the below beans are required for jwt authentication
+	 */
+	@Autowired
+	private AuthenticationManager authenticationManager;
+	@Autowired
+	private CustomUserDetailsService customUserDetailsService;
+	@Autowired
+	private JwtUtil jwtUtil;
+	/*
+	 * this endpoint takes a username and password and if they are correct 
+	 * then returns a valid jwt token.
+	 */
+	@GetMapping(value="/authenticate/{userName}/{password}")
+	public ResponseEntity<?> authenticateAndReturnJWT(@PathVariable String userName , @PathVariable String password) throws Exception{
+	try {
+		authenticationManager.authenticate(
+				new UsernamePasswordAuthenticationToken(userName,password)
+				
+				);
+		}catch (BadCredentialsException e) {
+			throw new Exception("Incorrect username or password", e);
+		}
+	
+	   final UserDetails userDetails=customUserDetailsService.loadUserByUsername(userName);
+	   
+	   final String jwt= jwtUtil.generateToken(userDetails);
+	   
+//	   return  ResponseEntity.ok(new String(jwt));
+	   return new  ResponseEntity<String>(jwt, HttpStatus.CREATED);
+		
 	}
 
 }
