@@ -87,8 +87,22 @@ public class SecurityConfigurer{
 		.and()
 		.exceptionHandling()
 		.and()
+		/*
+		 * as whole point of jwt is being stateless we use this implementation in filter cahin
+		 */
 		.sessionManagement()
 		.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+		/*
+		 * Adds the JwtTokenFilter to the DefaultSecurityFilterChain of spring boot security.
+		 * Add a filter to validate the tokens with every request
+		 * here we have created our own filter called jwtRequestFilter. We need to add that filter to 
+		 * spring security default filters and we can add by using two methods
+		 * .addFilterAfter() and .addFilterBefore() Here filter can be any custom filter. 
+		 * However, the custom filter should be implementation of GenericFilterBean.
+		 *  In most cases, the implementation of OncePerRequestFilter will be used.
+		 *  more info on this present in link ->
+		 *   https://stackoverflow.com/questions/58995870/why-do-we-need-to-call-http-addfilterbefore-method-in-spring-security-configur
+		 */
 		http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
 		//		.sessionManagement()
 		//		.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
