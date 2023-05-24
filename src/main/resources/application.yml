@@ -36,7 +36,7 @@ spring:
 management:
    security:
       enabled: true
-#   endpoints:
-#           web:
-#             exposure:
-#                include: health,info,beans,env
+   endpoints:
+           web:
+             exposure:
+                include: health,info,beans,env

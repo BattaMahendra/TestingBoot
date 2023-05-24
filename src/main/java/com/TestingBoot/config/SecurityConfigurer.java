@@ -63,6 +63,7 @@ public class SecurityConfigurer{
 		 */
 		auth
 //		.requestMatchers("/**").hasRole("ADMIN")
+		.requestMatchers(AntPathRequestMatcher.antMatcher("/actuator/**")).permitAll()
 		.requestMatchers(AntPathRequestMatcher.antMatcher("/app/welcome/**")).permitAll()
 		.requestMatchers(AntPathRequestMatcher.antMatcher("/app/authenticate/**")).permitAll()
 //		.requestMatchers(AntPathRequestMatcher.antMatcher("/**")).hasRole("ADMIN")
