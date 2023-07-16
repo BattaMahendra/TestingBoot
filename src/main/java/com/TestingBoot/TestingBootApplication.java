@@ -11,6 +11,9 @@ import org.springframework.cloud.context.config.annotation.RefreshScope;
 @EnableCaching
 @RefreshScope
 public class TestingBootApplication {
+	
+	//just added for testing jenkins build.
+	int dummyValue;
 
 	public static void main(String[] args) {
 		SpringApplication.run(TestingBootApplication.class, args);
