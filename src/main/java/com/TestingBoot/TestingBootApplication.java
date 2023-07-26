@@ -13,7 +13,7 @@ import org.springframework.cloud.context.config.annotation.RefreshScope;
 public class TestingBootApplication {
 	
 	//just added for testing jenkins build.
-	int dummyValue;
+	int dummyVal;
 
 	public static void main(String[] args) {
 		SpringApplication.run(TestingBootApplication.class, args);
