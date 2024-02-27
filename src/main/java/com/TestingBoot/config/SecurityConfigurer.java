@@ -34,7 +34,7 @@ import com.TestingBoot.filter.JwtRequestFilter;
  *  lets use modern security filter chains 
  */
 @Configuration
-@EnableWebSecurity
+//@EnableWebSecurity
 public class SecurityConfigurer{
 	
 	
@@ -66,6 +66,7 @@ public class SecurityConfigurer{
 		.requestMatchers(AntPathRequestMatcher.antMatcher("/actuator/**")).permitAll()
 		.requestMatchers(AntPathRequestMatcher.antMatcher("/app/welcome/**")).permitAll()
 		.requestMatchers(AntPathRequestMatcher.antMatcher("/app/authenticate/**")).permitAll()
+		.requestMatchers(AntPathRequestMatcher.antMatcher("/app/connect/**")).permitAll()
 //		.requestMatchers(AntPathRequestMatcher.antMatcher("/**")).hasRole("ADMIN")
 //		.requestMatchers(AntPathRequestMatcher.antMatcher("/app/g")).hasRole("USER")
 		

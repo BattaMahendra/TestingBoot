@@ -31,6 +31,7 @@ import com.TestingBoot.repo.UserRepository;
 import com.TestingBoot.service.AService;
 import com.TestingBoot.user.details.CustomUserDetailsService;
 import com.TestingBoot.util.JwtUtil;
+import com.security.token.TokenGenerator;
 
 @RestController
 @RequestMapping("/app")
@@ -160,5 +161,14 @@ public class AController {
 	   return new  ResponseEntity<String>(jwt, HttpStatus.CREATED);
 		
 	}
+	
+	@Autowired
+	TokenGenerator tokenGenerator;
+	
+	@GetMapping("/connect")
+	public String getOktaToken() {
+		return tokenGenerator.getToken("https://dev-59927831.okta.com/oauth2/default", "mahendra");
+	}
+
 
 }
